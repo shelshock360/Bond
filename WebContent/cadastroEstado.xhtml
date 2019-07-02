@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head></h:head>
+<body>
+
+	<h:form id="formularioCadastroEstados">
+		<h:panelGrid columns="3">
+			<h:outputText value="Nome" />
+			<p:inputText id="nomeEstado" required="true"
+				requiredMessage="prencha estado" value="#{estadoMB.estado.nome}" />
+
+			<p:message for="nomeEstado" />
+
+			<h:outputText value="Sigla" />
+			<p:inputText id="sigla" required="true"
+				requiredMessage="preencha estado" value="#{estadoMB.estado.sigla}" />
+				
+			<p:message for="sigla" />
+
+			<h:outputText value="Pais" />
+			<p:selectOneMenu id="pais" value="#{estadoMB.estado.pais}"
+				converter="converterPais" filter="true" filterMatchMode="startsWith">
+				<f:selectItems value="#{paisMB.paises}" var="pas"
+					itemLabel="#{pas.nome}" itemValue="#{pas}" />
+			</p:selectOneMenu>
+			<p:message for="pais" />
+			<p:commandButton update="@form,formTabelaEstados" value="Cadastrar"
+				actionListener="#{estadoMB.inserir()}" />
+		</h:panelGrid>
+	</h:form>
+
+	<h:form id="formTabelaEstados">
+
+		<p:dataTable value="#{estadoMB.estados}" var="est">
+
+			<p:column headerText="ID">
+				<h:outputText value="#{est.id}" />
+			</p:column>
+			<p:column headerText="Nome">
+				<h:outputText value="#{est.nome}" />
+			</p:column>
+
+			<p:column headerText="Sigla">
+				<h:outputText value="#{est.sigla}" />
+			</p:column>
+
+			<p:column headerText="Pais">
+				<h:outputText value="#{est.pais.nome}" />
+			</p:column>
+
+			<p:column headerText="Opçoes">
+
+				<p:commandButton value="Alterar" update="formularioCadastroEstados">
+					<f:setPropertyActionListener value="#{est}"
+						target="#{estadoMB.estado}" />
+				</p:commandButton>
+
+				<p:commandButton value="Excluir"
+					action="#{estadoMB.excluir(est.id)}" update="@form">
+					<p:confirm header="Confirmação" message="deseja excluir esse pais?"
+						icon="pi pi-exclamation-triangle" />
+				</p:commandButton>
+			</p:column>
+
+
+		</p:dataTable>
+
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton value="SIM" type="button"
+				styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+			<p:commandButton value="NAO" type="button"
+				styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+		</p:confirmDialog>
+
+	</h:form>
+</body>
+</html>

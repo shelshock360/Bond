@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<h:head></h:head>
+<body>
+
+	<h:form id="formularioCadastroPais">
+		<h:panelGrid columns="3">
+			<h:outputText value="Nome" />
+			<p:inputText id="nomePais" required="true"
+				requiredMessage="prencha pais" value="#{paisMB.pais.nome}" />
+
+			<p:commandButton update="@form,formTabelaPaises" value="Cadastrar"
+				actionListener="#{paisMB.inserir()}" />
+		</h:panelGrid>
+	</h:form>
+	
+	<h:form id="formTabelaPaises">
+
+		<p:dataTable value="#{paisMB.paises}" var="pas">
+
+			<p:column headerText="ID">
+				<h:outputText value="#{pas.id}" />
+			</p:column>
+			<p:column headerText="Nome">
+				<h:outputText value="#{pas.nome}" />
+			</p:column>
+			
+			<p:column headerText="Opçoes">
+
+				<p:commandButton value="Alterar"
+					update="formularioCadastroPais">
+
+					<f:setPropertyActionListener value="#{pas}"
+						target="#{paisMB.pais}" />
+				</p:commandButton>
+
+				<p:commandButton value="Excluir"
+					action="#{paisMB.excluir(pas.id)}" update="@form">
+					<p:confirm header="Confirmação"
+						message="deseja excluir esse pais?"
+						icon="pi pi-exclamation-triangle" />
+				</p:commandButton>
+
+
+
+			</p:column>
+
+
+		</p:dataTable>
+
+
+
+
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton value="SIM" type="button"
+				styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+			<p:commandButton value="NAO" type="button"
+				styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+		</p:confirmDialog>
+
+	</h:form>
+</body>
+</html>
